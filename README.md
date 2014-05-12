@@ -13,6 +13,6 @@ This project contains several sub-projects:
      A minimal example app to demonstrate integration of Mintcoin payments into
      your Android app.
 
-You can build all sub-projects at once using Maven:
+You can build all sub-projects at once using Maven 3.0.5:
 
-`mvn clean install`
+`mvn clean install -DskipTests`
