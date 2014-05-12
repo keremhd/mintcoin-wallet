@@ -1,0 +1,26 @@
+Mintcoiny vždy so sebou vo svojom vrecku. Jednoduché a rýchle platby pomocou QR kódov. Pre obchodníkov ponúka spoľahlivé a okamžité prijímanie platieb. Mintcoin Wallet je prvá mobilná Mintcoin aplikácia a preukázateľne aj najbezpečnejšia.
+
+FUNKCIE:
+
+• Nie je potrebná žiadna registrácia ani žiadny účet.
+• Zobrazenie zostatku Mintcoinov v MINT alebo mMINT.
+• Prepočet hodnoty Mintcoinov do viacerých cudzích mien.
+• Posielanie a prijímanie Mintcoinov pomocou NFC, QR kódov alebo Mintcoin adries.
+• Adresár pre často používané Mintcoin adresy.
+• V offline režime je platba možná aj cez Bluetooth.
+• Notifikácie v stavovej lište pri prijatí Mintcoinov.
+• Widget s celkovým zostatkom.
+
+Viac informácií o Mintcoine
+http://mintcoin.org
+
+Ak chcete prispieť do projektu Mintcoin Wallet nájdete ho na adrese
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Bitcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+
+Licencia: GPLv3
+Použitie len na vlastné riziko!
+http://www.gnu.org/licenses/gpl-3.0.en.html

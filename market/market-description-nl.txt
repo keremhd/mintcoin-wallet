@@ -1,0 +1,24 @@
+Dit is een standalone Mintcoin Wallet voor uw Android apparaat. U kan direct Mintcoins versturen tussen telefoons door simpelweg de QR-code te scannen die de app weergeeft of via NFC (Near Field Communication).
+
+FUNCTIES:
+
+• Weergeven van het wallet saldo in Mintcoin en verschillende andere valuta.
+• Verzenden en ontvangen van Mintcoin via NFC, QR-codes of Mintcoin URLs.
+• Adresboek voor veelgebruikte Mintcoin adressen.
+• Transacties ingeven tijdens het offline zijn, deze zullen worden uitgevoerd wanneer u online komt.
+• Systeem melding over Mintcoin connectiviteit en ontvangen mintcoins.
+• Widget voor Mintcoin saldo.
+
+Voor meer informatie over Mintcoin kunt u terecht op
+http://mintcoin.org
+
+Als u een bijdrage wil leveren aan Mintcoin Wallet, het project is te vinden op
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Bitcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+
+Licentie: GPLv3
+Gebruik op eigen risico!
+http://www.gnu.org/licenses/gpl-3.0.en.html

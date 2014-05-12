@@ -1,0 +1,26 @@
+Have your Mintcoins always with you, in your pocket! You pay by quickly scanning a QR-code. As a merchant, you receive payments reliably and instantly. Mintcoin Wallet is the first mobile Mintcoin app, and arguably also the most secure!
+
+FEATURES:
+
+• No registration, web service or cloud needed! This wallet is de-centralized and peer to peer.
+• Display of Mintcoin amount in MINT and mMINT.
+• Conversion to and from national currencies.
+• Sending and receiving of Mintcoin via NFC, QR-codes or Mintcoin URLs.
+• Address book for regularly used Mintcoin addresses.
+• When you're offline, you can still pay via Bluetooth.
+• System notification for received coins.
+• App widget for Mintcoin balance.
+
+You can find more about Mintcoin at
+http://mintcoin.org
+
+If you want to contribute to Mintcoin Wallet, the project is located at
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Bitcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+
+License: GPLv3
+Use at your own risk!
+http://www.gnu.org/licenses/gpl-3.0.en.html

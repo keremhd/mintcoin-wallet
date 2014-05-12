@@ -1,0 +1,25 @@
+Miej swoje Mintcoiny zawsze w swojej kieszeni! Zapłacisz skanując kod QR. Jako sprzedawca odbierzesz płatności niezawodnie i natychmiastowo. Mintcoin Wallet jest pierwszą aplikacją Mintcoinową na telefony i niezaprzeczalnie najbezpieczniejszą.
+
+WŁAŚCIWOŚCI:
+
+• Brak konieczności rejestracji, serwisu online lub chmury! Ten portfel używa zdecentralizowanej sieci peer-to-peer.
+• Wyświetl ilość kwotę w MINT i mMINT.
+• Zamiana z i na waluty narodowe
+• Wysyłąnie i odbieranie Mintcoin za pomocą NFC, kodów QR czy adresów Mintcoin URL.
+• Książka adresowa dla regularnie używanych adresów Mintcoin.
+• Gdy jesteś offline, wciąż możesz zapłacić przy użyciu Bluetooth.
+• System powiadomień dla przychodzących transakcji.
+• Widget aplikacji dla stanu konta.
+
+Dowiedz się więcej o Mintcoin
+http://mintcoin.org
+
+Jeśli chcesz przyczynić się do rozwoju Mintcoin Wallet to projekt znajduje się pod adresem
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Mintcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+Licencja: GPLv3
+Używasz na własne ryzyko!
+http://www.gnu.org/licenses/gpl-3.0.en.html

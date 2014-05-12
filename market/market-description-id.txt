@@ -1,0 +1,25 @@
+Dengan aplikasi ini Anda selalu mempunyai Mintcoin dengan Anda, dalam saku Anda! Anda dapat mengirim pembayaran hanya dengan memindai kode-QR atau mendekatkan dua ponsel bersama (NFC). Mintcoin Wallet dirancang untuk mudah digunakan dan diandalkan, sementara juga menjadi lebih aman dan cepat.
+
+FITUR:
+
+• Tidak diperlukan server awan atau layanan web! Dompet ini benar-benar peer ke peer.
+• Tampilkan saldo dompet dalam Mintcoin dan mata uang lainnya.
+• Mengirim dan menerima Mintcoin via NFC, kode-QR atau Tautan Mintcoin.
+• Buku alamat untuk alamat penggunaan mintcoin secara reguler.
+• Masukkan transaksi saat offline, akan dilaksanakan ketika online.
+• Notifikasi sistem untuk konektivitas Mintcoin dan menerima koin.
+• Widget Apl untuk saldo Mintcoin.
+
+Anda dapat mengetahui lebih mengenai Mintcoin di
+http://mintcoin.org
+
+Jika Anda ingin berkontribusi kepada Mintcoin Wallet, proyeknya berada di
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Bitcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+
+Lisensi: GPLv3
+Gunakan dengan resiko Anda!
+http://www.gnu.org/licenses/gpl-3.0.en.html

@@ -1,0 +1,26 @@
+Имај ги твоите Mintcoins секогаш со тебе, во твојот џеб! Плаќањето се одвива со брзо скенирање на QR код. Како трговец, можеш да примаш плаќања доверливо и без одложување. Mintcoin Паричник е првата мобилна Mintcoin апликација и веројатно најсигурната!
+
+ОДЛИКИ:
+
+• Без регистрација, веб сервис или информации во облакот! Овој паричник е децентрализиран, со peer to peer конекција.
+• Прикажување на Mintcoin сумата во MINT и mMINT.
+• Конверзија во и од национални валути.
+• Испраќање и примање на Mintcoin преку NFC, QR кодови или Mintcoin интернет адреса.
+• Адресар за често користени Mintcoin адреси.
+• Кога си офлајн, сѐ уште можеш да плаќаш преку Bluetooth.
+• Системско известување за примени Mintcoins.
+• Апликациски виџет за Mintcoin салдо.
+
+Можеш да дознаеш повеќе за Mintcoin на
+http://bitcoin.org
+
+Ако сакаш да придонесеш за Mintcoin Паричник, проектот е лоциран на
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Bitcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+
+License: GPLv3
+Користи на сопствен ризик!
+http://www.gnu.org/licenses/gpl-3.0.en.html

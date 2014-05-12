@@ -1,0 +1,24 @@
+Αυτό είναι ένα αυτόνομο Mintcoin Πορτοφόλι για την Android συσκευή σας. Μπορείτε να στείλετε Mintcoin μεταξύ τηλεφώνων μόνο με σάρωση του QR κώδικα που εμφανίζεται από την εφαρμογή. Ή μέσω του NFC (Near Field Communication).
+
+ΧΑΡΑΚΤΗΡΙΣΤΙΚΑ:
+
+• Προβολή του υπολοίπου του πορτοφολιού στο Mintcoin και σε διάφορα άλλα νομίσματα.
+• Αποστολή και λήψη Mintcoin μέσω NFC, QR-κωδικούς ή τη χρήση Mintcoin διευθύνσεων URL.
+• Κατάλογος διευθύνσεων για τις δημοφιλείς διευθύνσεις Mintcoin.
+• συναλλαγές που εισάγονται χωρίς σύνδεση, εκτελούνται όταν συνδεθεί η συσκευή στο διαδίκτειο.
+• Σύστημα ειδοποιήσεις για τη Mintcoin συνδεσιμότητα και τα ληφθειντα νομίσματα.
+• App widget για το υπόλοιπο των Mintcoin.
+
+Μπορείτε να βρείτε περισσότερα για τη χρήση Mintcoin στο
+http://mintcoin.org
+
+Αν θέλετε να συμβάλει στη τη χρήση του Mintcoin Wallet, το έργο βρίσκεται εδώ:
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Bitcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+
+Άδεια: GPLv3
+Χρησιμοποιήστε με δική σας ευθύνη!
+http://www.gnu.org/licenses/gpl-3.0.en.html

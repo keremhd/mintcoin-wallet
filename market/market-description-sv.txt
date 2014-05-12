@@ -1,0 +1,24 @@
+Detta är en fristående Mintcoin plånbok för Android. Du kan skicka Mintcoins mellan telefoner genom att scanna den QR kod som visas på skärmen. Eller använda NFC (Near Field Communication).
+
+FUNKTIONER:
+
+• Visa plånbokens värde i Mintcoins och andra valutor.
+• Skicka och ta emot Mintcoins via NFC, QR-koder eller en Mintcoin URL.
+• Adressbok för de Mintcoin adresser man använder ofta.
+• Påbörja transaktioner medan du är offline, de utförs när du kommer online.
+• Systemnotifikationer när Mintcoins skickats till dig, och när plånboken kommunicerar med nätverket.
+• App widget som visar plånbokens värde.
+
+Du kan lära dig mer om Mintcoin genom att besöka
+http://mintcoin.org
+
+Om du vill hjälpa till med utvecklingen av Mintcoin Wallet så kan du hitta projektet här
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Bitcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+
+Licens: GPLv3
+Använd på egen risk!
+http://www.gnu.org/licenses/gpl-3.0.en.html

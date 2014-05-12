@@ -1,0 +1,25 @@
+Với ứng dụng này thì các Mintcoin sẽ luôn trong tầm kiểm soát của riêng bạn! Bạn có thể gửi các khoản chi trả thông qua thao tác cực kỳ đơn giản đó là quét mã dạng QR hoặc bằng cách chạm hai điện thoại vào nhau (NFC). Mintcoin Wallet được thiết với nguyên lý dễ dàng, tiện lợi, đáng tin tưởng, cũng như cực kỳ nhanh lẹ và đảm bảo an toàn cho người dùng.
+
+TÍNH NĂNG:
+
+• Không cần có cloud server hoặc dịch vụ web bổ sung nào cả! Ví tiền của bạn được kết nối thông qua sự lựa chọn của bạn trong kết nối mang ngang hàng lẫn nhau.
+• Hiển thị trạng thái cân bằng tài khoản giữa Mintcoin và các loại tiền tệ khác.
+• Gửi và nhận Mintcoin thông qua NFC, mã dạng QR hoặc đường dẫn liên kết dạng Mintcoin.
+• Sổ địa chỉ đối với các địa chỉ Mintcoin thường sử dụng.
+• Tham gia tiến trình giao dịch ngay khi không có kết nối mạng, và sẽ thực hiện kết nối ngay khi có mạng.
+• Thông báo trong hệ thống theo tính nhanh gọn về số lượng Mintcoin nhận và gửi đi.
+• Tiện ích dành riêng cho Mintcoin.
+
+Bạn có thể tìm hiểu thêm về Mintcoin tại
+http://mintcoin.org
+
+Nếu bạn có ý tưởng đóng góp cho Mintcoin Wallet, hãy truy cập vào trang web
+https://github.com/langerhans/mintcoin-wallet-new
+
+This is a fork of the popular Bitcoin Wallet by Andreas Schildbach and was converted to Mintcoin by me.
+Find the original at
+https://play.google.com/store/apps/details?id=de.schildbach.wallet
+
+Giấy phép: GPLv3
+Sử dụng với sự cẩn trọng của riêng bạn!
+http://www.gnu.org/licenses/gpl-3.0.en.html
