@@ -50,8 +50,8 @@ public class Constants
 
 	public static final String CHECKPOINTS_FILENAME = "checkpoints" + FILENAME_NETWORK_SUFFIX;
 
-	private static final String BLOCKEXPLORER_BASE_URL_PROD = "http://mintcoin-explorer.info/";
-	private static final String BLOCKEXPLORER_BASE_URL_TEST = "https://mintcoin-explorer.info/testnet/"; //MINT: Not yet...
+	private static final String BLOCKEXPLORER_BASE_URL_PROD = "http://mint.blockx.info/get/chain/MintCoin";
+	private static final String BLOCKEXPLORER_BASE_URL_TEST = "http://mint.blockx.info/get/chain/MintCoin"; //MINT: Not yet...
 	public static final String BLOCKEXPLORER_BASE_URL = NETWORK_PARAMETERS.getId().equals(NetworkParameters.ID_MAINNET) ? BLOCKEXPLORER_BASE_URL_PROD
 			: BLOCKEXPLORER_BASE_URL_TEST;
 
