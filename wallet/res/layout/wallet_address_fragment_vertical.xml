@@ -9,6 +9,7 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="top|center_horizontal"
 		android:layout_marginBottom="8dp"
+		android:color="@color/fg_insignificant"
 		android:text="@string/wallet_address_fragment_your"
 		android:textSize="@dimen/font_size_small" />
 

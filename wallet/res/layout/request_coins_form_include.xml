@@ -11,6 +11,7 @@
 		android:layout_marginLeft="@dimen/list_entry_padding_horizontal_lax"
 		android:layout_marginRight="@dimen/list_entry_padding_horizontal_lax"
 		android:layout_marginTop="8dp"
+		android:color="@color/fg_insignificant"
 		android:text="@string/request_coins_fragment_amount_label"
 		android:textSize="@dimen/font_size_normal"
 		android:textStyle="bold" />
@@ -62,6 +63,7 @@
 		android:layout_marginLeft="@dimen/list_entry_padding_horizontal_lax"
 		android:layout_marginRight="@dimen/list_entry_padding_horizontal_lax"
 		android:layout_marginTop="8dp"
+		android:color="@color/fg_insignificant"
 		android:text="@string/request_coins_fragment_address_label"
 		android:textSize="@dimen/font_size_normal"
 		android:textStyle="bold" />

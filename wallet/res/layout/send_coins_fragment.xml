@@ -93,6 +93,7 @@
 		android:layout_marginLeft="@dimen/list_entry_padding_horizontal_lax"
 		android:layout_marginRight="@dimen/list_entry_padding_horizontal_lax"
 		android:layout_marginTop="8dp"
+		android:textColor="@color/fg_insignificant"
 		android:text="@string/send_coins_fragment_amount_label"
 		android:textSize="@dimen/font_size_small"
 		android:textStyle="bold" />
