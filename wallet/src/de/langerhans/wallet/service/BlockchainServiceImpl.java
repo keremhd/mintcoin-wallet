@@ -59,7 +59,7 @@ import android.text.format.DateUtils;
 import com.google.bitcoin.core.AbstractPeerEventListener;
 import com.google.bitcoin.core.Address;
 import com.google.bitcoin.core.Block;
-import com.google.bitcoin.core.BlockChain;
+import com.google.bitcoin.core.TxTrackingBlockChain;
 import com.google.bitcoin.core.CheckpointManager;
 import com.google.bitcoin.core.Peer;
 import com.google.bitcoin.core.PeerEventListener;
@@ -75,7 +75,7 @@ import com.google.bitcoin.core.Wallet.BalanceType;
 import com.google.bitcoin.net.discovery.*;
 import com.google.bitcoin.store.BlockStore;
 import com.google.bitcoin.store.BlockStoreException;
-import com.google.bitcoin.store.SPVBlockStore;
+import com.google.bitcoin.store.TxTrackingBlockStore;
 import com.google.bitcoin.utils.Threading;
 
 import de.langerhans.wallet.AddressBookProvider;
@@ -98,9 +98,9 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 	private WalletApplication application;
 	private Configuration config;
 
-	private BlockStore blockStore;
+	private TxTrackingBlockStore blockStore;
 	private File blockChainFile;
-	private BlockChain blockChain;
+	private TxTrackingBlockChain blockChain;
 	@CheckForNull
 	private PeerGroup peerGroup;
 
@@ -634,7 +634,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		intentFilter.addAction(Intent.ACTION_DEVICE_STORAGE_OK);
 		registerReceiver(connectivityReceiver, intentFilter);
 
-		blockChainFile = new File(getDir("blockstore", Context.MODE_PRIVATE), Constants.BLOCKCHAIN_FILENAME);
+		blockChainFile = new File(getExternalFilesDir(Context.MODE_PRIVATE), Constants.BLOCKCHAIN_FILENAME);
 		final boolean blockChainFileExists = blockChainFile.exists();
 
 		if (!blockChainFileExists)
@@ -648,7 +648,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 
 		try
 		{
-			blockStore = new SPVBlockStore(Constants.NETWORK_PARAMETERS, blockChainFile);
+			blockStore = new TxTrackingBlockStore(Constants.NETWORK_PARAMETERS, blockChainFile);
 			blockStore.getChainHead(); // detect corruptions as early as possible
 
 			final long earliestKeyCreationTime = wallet.getEarliestKeyCreationTime();
@@ -679,7 +679,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 
 		try
 		{
-			blockChain = new BlockChain(Constants.NETWORK_PARAMETERS, wallet, blockStore);
+			blockChain = new TxTrackingBlockChain(Constants.NETWORK_PARAMETERS, wallet, blockStore);
 		}
 		catch (final BlockStoreException x)
 		{
