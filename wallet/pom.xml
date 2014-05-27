@@ -154,7 +154,7 @@
 					</excludeJarResources>
 					<sdk>
 						<platform>14</platform>
-						<path>/home/kbradsha/Desktop/development/adt-bundle-linux-x86_64-20130522/sdk</path>
+						<path>/home/paspi/opt/adt-bundle-linux-x86_64-20140321/sdk</path>
 					</sdk>
 					<sign>
 						<debug>both</debug>

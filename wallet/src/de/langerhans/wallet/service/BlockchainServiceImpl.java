@@ -177,6 +177,12 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		}
     };
 
+    private void deleteBlockChainFile() {
+        blockChainFile.delete();
+        new File(blockChainFile.toString()+".t").delete();
+        new File(blockChainFile.toString()+".p").delete();
+    }
+
 	private void notifyCoinsReceived(@Nullable final Address from, @Nonnull final BigInteger amount)
 	{
 		if (notificationCount == 1)
@@ -414,6 +420,8 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 					@Override
 					public InetSocketAddress[] getPeers(final long timeoutValue, final TimeUnit timeoutUnit) throws PeerDiscoveryException
 					{
+						log.info("Network params id=" + Constants.NETWORK_PARAMETERS.getId());
+
 						final List<InetSocketAddress> peers = new LinkedList<InetSocketAddress>();
 
 						boolean needsTrimPeersWorkaround = false;
@@ -634,7 +642,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		intentFilter.addAction(Intent.ACTION_DEVICE_STORAGE_OK);
 		registerReceiver(connectivityReceiver, intentFilter);
 
-		blockChainFile = new File(getExternalFilesDir(Context.MODE_PRIVATE), Constants.BLOCKCHAIN_FILENAME);
+		blockChainFile = new File(getExternalFilesDir("blockchain"), Constants.BLOCKCHAIN_FILENAME);
 		final boolean blockChainFileExists = blockChainFile.exists();
 
 		if (!blockChainFileExists)
@@ -653,6 +661,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 
 			final long earliestKeyCreationTime = wallet.getEarliestKeyCreationTime();
 
+            /*
 			if (!blockChainFileExists && earliestKeyCreationTime > 0)
 			{
 				try
@@ -665,10 +674,11 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 					log.error("problem reading checkpoints, continuing without", x);
 				}
 			}
+            */
 		}
 		catch (final BlockStoreException x)
 		{
-			blockChainFile.delete();
+            deleteBlockChainFile();
 
 			final String msg = "blockstore cannot be created";
 			log.error(msg, x);
@@ -786,7 +796,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		if (resetBlockchainOnShutdown)
 		{
 			log.info("removing blockchain");
-			blockChainFile.delete();
+            deleteBlockChainFile();
 		}
 
 		super.onDestroy();

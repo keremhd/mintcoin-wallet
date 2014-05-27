@@ -177,11 +177,11 @@
 
 		<provider
 			android:name="de.langerhans.wallet.AddressBookProvider"
-			android:authorities="de.langerhans.wallet.address_book"
+			android:authorities="cc.mintcoin.wallet.address_book"
 			android:exported="false" />
 		<provider
 			android:name="de.langerhans.wallet.ExchangeRatesProvider"
-			android:authorities="de.langerhans.wallet.exchange_rates"
+			android:authorities="cc.mintcoin.wallet.exchange_rates"
 			android:exported="false" />
 
 		<receiver

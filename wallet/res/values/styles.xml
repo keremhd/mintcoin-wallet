@@ -3,7 +3,7 @@
 
 	<!-- This was changed to be compatible with eclipse/M2E/Maven
 	<style name="My.Theme" parent="@style/Theme.Sherlock.Light.DarkActionBar.ForceOverflow"> -->
-	<style name="MyTheme">
+	<style name="MyTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar.ForceOverflow">
 		<!--  <item name="actionBarStyle">@style/My.Widget.ActionBar</item> -->
 		<item name="actionModeStyle">@style/My.Widget.ActionMode</item>
 		<item name="android:editTextStyle">@style/My.Widget.EditText</item>
