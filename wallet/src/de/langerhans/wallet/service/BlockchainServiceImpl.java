@@ -415,7 +415,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
                     String channel = "#mintcoin" + String.format("%02d", i);
                     private final PeerDiscovery normalPeerDiscovery = new DnsDiscovery(Constants.NETWORK_PARAMETERS);
                     private final PeerDiscovery fallbackPeerDiscovery = new IrcDiscovery(channel);
-                    private final PeerDiscovery seedPeers = new SeedPeers(Constants.NETWORK_PARAMETERS);
+                    private final PeerDiscovery seedPeerDiscovery = new SeedPeers(Constants.NETWORK_PARAMETERS);
 
 					@Override
 					public InetSocketAddress[] getPeers(final long timeoutValue, final TimeUnit timeoutUnit) throws PeerDiscoveryException
@@ -438,39 +438,68 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 							}
 						}
 
+                        log.info("1");
 						if (!connectTrustedPeerOnly)
                         {
+                            log.info("2");
                             List discoveredpeers = null;
                             try {
-                                discoveredpeers = Arrays.asList(seedPeers.getPeers(timeoutValue, timeoutUnit));
+                                log.info("3");
+                                discoveredpeers = Arrays.asList(normalPeerDiscovery.getPeers(timeoutValue, timeoutUnit));
                                 peers.addAll(discoveredpeers);
+                                log.info(this.getClass().toString(), "Discovered " + discoveredpeers.size() + " DNS peers");
+                                log.info("4");
                             } catch (PeerDiscoveryException e) {
+                                log.info("5");
                                 log.info(this.getClass().toString(), "Failed to discover DNS peers: " + e.getMessage());
+                            } catch (RuntimeException e) {
+                                log.info(this.getClass().toString(), "Failed to discover DNS peers RuntimeException: " + e.getMessage());
                             }
+                            log.info("6");
+
                             //fallback to IRC in case the DNS seeds returns none/not enough peers, because we have just one currently.
                             if (discoveredpeers != null)
                                 if (discoveredpeers.size() < 4)
                                 {
+                                log.info("7");
                                     try {
+                                        log.info("8");
                                         discoveredpeers = Arrays.asList(fallbackPeerDiscovery.getPeers(timeoutValue, timeoutUnit));
                                         peers.addAll(discoveredpeers);
+                                        log.info(this.getClass().toString(), "Discovered " + discoveredpeers.size() + " IRC peers");
                                     } catch (PeerDiscoveryException e) {
+                                        log.info("9");
                                         log.info(this.getClass().toString(), "Failed to discover IRC peers: " + e.getMessage());
                                     }
+                                    log.info("10");
                                 }
-                            try {
-                                discoveredpeers = Arrays.asList(normalPeerDiscovery.getPeers(timeoutValue, timeoutUnit));
-                                peers.addAll(discoveredpeers);
-                            } catch (PeerDiscoveryException e) {
-                                log.info(this.getClass().toString(), "Failed to discover SeedPeers: " + e.getMessage());
-                            }
+                            log.info("11");
+                            
+                            if (discoveredpeers != null)
+                                if (discoveredpeers.size() < 4)
+                                {
+                                    try {
+                                        log.info("12");
+                                        discoveredpeers = Arrays.asList(seedPeerDiscovery.getPeers(timeoutValue, timeoutUnit));
+                                        peers.addAll(discoveredpeers);
+                                    } catch (PeerDiscoveryException e) {
+                                        log.info("13");
+                                        log.info(this.getClass().toString(), "Failed to discover SeedPeers: " + e.getMessage());
+                                    } catch (RuntimeException e) {
+                                        log.info(this.getClass().toString(), "Failed to discover SeedPeers RuntimeException: " + e.getMessage());
+                                    }
+                                    log.info("14");
+                                }
                         }
+                        log.info("15");
 
 						// workaround because PeerGroup will shuffle peers
 						if (needsTrimPeersWorkaround)
 							while (peers.size() >= maxConnectedPeers)
 								peers.remove(peers.size() - 1);
+                        log.info("16");
 
+                        log.info(this.getClass().toString(), "Discovered " + peers.size() + " peers in total");
 						return peers.toArray(new InetSocketAddress[0]);
 					}
 
@@ -643,6 +672,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		registerReceiver(connectivityReceiver, intentFilter);
 
 		blockChainFile = new File(getExternalFilesDir("blockchain"), Constants.BLOCKCHAIN_FILENAME);
+		//blockChainFile = new File(getDir("blockchain", Context.MODE_PRIVATE), Constants.BLOCKCHAIN_FILENAME);
 		final boolean blockChainFileExists = blockChainFile.exists();
 
 		if (!blockChainFileExists)
