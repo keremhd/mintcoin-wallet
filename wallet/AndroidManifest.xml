@@ -55,7 +55,7 @@
 		android:smallScreens="true"
 		android:xlargeScreens="true" />
 
-	<application android:name="de.langerhans.wallet.WalletApplication"
+	<application android:name="cc.mintcoin.wallet.WalletApplication"
 		android:allowBackup="false"
 		android:hardwareAccelerated="true"
 		android:icon="@drawable/app_icon"
@@ -63,13 +63,13 @@
 		android:theme="@style/MyTheme" >
 		<!-- 	android:theme="@style/My.Theme" > -->
 		<activity
-			android:name="de.langerhans.wallet.ui.WalletActivity"
+			android:name="cc.mintcoin.wallet.ui.WalletActivity"
 			android:configChanges="keyboard|keyboardHidden"
 			android:launchMode="singleTask" />
 
 		<activity-alias
-			android:name="de.langerhans.wallet.WalletActivity"
-			android:targetActivity="de.langerhans.wallet.ui.WalletActivity" >
+			android:name="cc.mintcoin.wallet.WalletActivity"
+			android:targetActivity="cc.mintcoin.wallet.ui.WalletActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -85,7 +85,7 @@
 		</activity-alias>
 
 		<activity
-			android:name="de.langerhans.wallet.ui.SendCoinsActivity"
+			android:name="cc.mintcoin.wallet.ui.SendCoinsActivity"
 			android:configChanges="keyboard|keyboardHidden"
 			android:label="@string/send_coins_activity_title"
 			android:screenOrientation="behind"
@@ -121,41 +121,41 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name="de.langerhans.wallet.ui.SendCoinsQrActivity"
+			android:name="cc.mintcoin.wallet.ui.SendCoinsQrActivity"
 			android:configChanges="keyboard|keyboardHidden"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar" >
 		</activity>
 		<activity
-			android:name="de.langerhans.wallet.ui.RequestCoinsActivity"
+			android:name="cc.mintcoin.wallet.ui.RequestCoinsActivity"
 			android:configChanges="keyboard|keyboardHidden"
 			android:label="@string/request_coins_activity_title"
 			android:screenOrientation="behind"
 			android:windowSoftInputMode="adjustResize" />
 		<activity
-			android:name="de.langerhans.wallet.ui.AddressBookActivity"
+			android:name="cc.mintcoin.wallet.ui.AddressBookActivity"
 			android:configChanges="keyboard|keyboardHidden"
 			android:label="@string/address_book_activity_title"
 			android:screenOrientation="behind" />
 		<activity
-			android:name="de.langerhans.wallet.ui.ExchangeRatesActivity"
+			android:name="cc.mintcoin.wallet.ui.ExchangeRatesActivity"
 			android:configChanges="keyboard|keyboardHidden"
 			android:label="@string/exchange_rates_activity_title"
 			android:screenOrientation="behind" />
 		<activity
-			android:name="de.langerhans.wallet.ui.NetworkMonitorActivity"
+			android:name="cc.mintcoin.wallet.ui.NetworkMonitorActivity"
 			android:configChanges="keyboard|keyboardHidden"
 			android:label="@string/network_monitor_activity_title"
 			android:screenOrientation="behind" />
 		<activity
-			android:name="de.langerhans.wallet.ui.PreferencesActivity"
+			android:name="cc.mintcoin.wallet.ui.PreferencesActivity"
 			android:label="@string/preferences_activity_title"
 			android:screenOrientation="behind" />
 		<activity
-			android:name="de.langerhans.wallet.ui.AboutActivity"
+			android:name="cc.mintcoin.wallet.ui.AboutActivity"
 			android:label="@string/about_title"
 			android:screenOrientation="behind" />
 		<activity
-			android:name="de.langerhans.wallet.ui.ImportKeysActivity"
+			android:name="cc.mintcoin.wallet.ui.ImportKeysActivity"
 			android:configChanges="orientation|keyboard|keyboardHidden"
 			android:theme="@style/MyTheme.Dialog" >
 			<intent-filter android:label="@string/import_keys_intent_filter_action" >
@@ -168,7 +168,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name="de.langerhans.wallet.ui.ScanActivity"
+			android:name="cc.mintcoin.wallet.ui.ScanActivity"
 			android:configChanges="orientation|keyboard|keyboardHidden"
 			android:screenOrientation="landscape"
 			android:stateNotNeeded="true"
@@ -176,16 +176,16 @@
 			android:windowSoftInputMode="stateAlwaysHidden" />
 
 		<provider
-			android:name="de.langerhans.wallet.AddressBookProvider"
+			android:name="cc.mintcoin.wallet.AddressBookProvider"
 			android:authorities="cc.mintcoin.wallet.address_book"
 			android:exported="false" />
 		<provider
-			android:name="de.langerhans.wallet.ExchangeRatesProvider"
+			android:name="cc.mintcoin.wallet.ExchangeRatesProvider"
 			android:authorities="cc.mintcoin.wallet.exchange_rates"
 			android:exported="false" />
 
 		<receiver
-			android:name="de.langerhans.wallet.WalletBalanceWidgetProvider"
+			android:name="cc.mintcoin.wallet.WalletBalanceWidgetProvider"
 			android:label="Mintcoin Wallet Balance" >
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -197,13 +197,13 @@
 		</receiver>
 
 		<service
-			android:name="de.langerhans.wallet.service.BlockchainServiceImpl"
+			android:name="cc.mintcoin.wallet.service.BlockchainServiceImpl"
 			android:exported="false" />
 		<service
-			android:name="de.langerhans.wallet.offline.AcceptBluetoothService"
+			android:name="cc.mintcoin.wallet.offline.AcceptBluetoothService"
 			android:exported="false" />
 
-		<receiver android:name="de.langerhans.wallet.service.AutosyncReceiver" >
+		<receiver android:name="cc.mintcoin.wallet.service.AutosyncReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 				<action android:name="android.intent.action.ACTION_POWER_CONNECTED" />

@@ -9,7 +9,7 @@
 	<name>Mintcoin Integration for Android</name>
 
 	<parent>
-		<groupId>de.langerhans.wallet</groupId>
+		<groupId>cc.mintcoin.wallet</groupId>
 		<artifactId>base</artifactId>
 		<version>1</version>
 	</parent>
