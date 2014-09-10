@@ -139,7 +139,11 @@ public final class BlockListFragment extends SherlockListFragment
 	{
 		loaderManager.destroyLoader(ID_TRANSACTION_LOADER);
 
-		activity.unregisterReceiver(tickReceiver);
+		try {
+			activity.unregisterReceiver(tickReceiver);
+		}
+		catch (IllegalArgumentException e) {
+		}
 
 		super.onPause();
 	}

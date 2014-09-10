@@ -1,4 +1,5 @@
 /*
+ * Copyright 2014 Kerem Hadimli, Mintcoin
  * Copyright 2011-2014 the original author or authors.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -36,6 +37,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.annotation.SuppressLint;
+import android.app.DownloadManager;
+import android.app.DownloadManager.Query;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -46,13 +49,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.os.storage.OnObbStateChangeListener;
+import android.os.storage.StorageManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateUtils;
 
@@ -77,6 +84,7 @@ import com.google.bitcoin.store.BlockStore;
 import com.google.bitcoin.store.BlockStoreException;
 import com.google.bitcoin.store.TxTrackingBlockStore;
 import com.google.bitcoin.utils.Threading;
+import com.google.common.io.Files;
 
 import cc.mintcoin.wallet.AddressBookProvider;
 import cc.mintcoin.wallet.Configuration;
@@ -89,6 +97,7 @@ import cc.mintcoin.wallet.util.CrashReporter;
 import cc.mintcoin.wallet.util.GenericUtils;
 import cc.mintcoin.wallet.util.ThrottlingWalletChangeListener;
 import cc.mintcoin.wallet.util.WalletUtils;
+import ch.qos.logback.core.util.FileUtil;
 
 /**
  * @author Andreas Schildbach
@@ -648,21 +657,34 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 
 		super.onCreate();
 
+		application = (WalletApplication) getApplication();
+		config = application.getConfiguration();
+
+		final Wallet wallet = application.getWallet();
+
+		bestChainHeightEver = config.getBestChainHeightEver();
+		blockChainFile =  new File(getDir("blockchain", Context.MODE_PRIVATE), Constants.BLOCKCHAIN_FILENAME);
 		nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+		final boolean blockChainFileExists = blockChainFile.exists();
+		if (!blockChainFileExists)
+		{
+			log.info("blockchain does not exist");
+		}
+	}
+	
+	private void startBlockChain() {
+		if (blockChain != null)
+			return;
+		
+		final Wallet wallet = application.getWallet();
+		
 		final String lockName = getPackageName() + " blockchain sync";
 
 		final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, lockName);
 
-		application = (WalletApplication) getApplication();
-		config = application.getConfiguration();
-		final Wallet wallet = application.getWallet();
-
-		bestChainHeightEver = config.getBestChainHeightEver();
-
 		peerConnectivityListener = new PeerConnectivityListener();
-
 		sendBroadcastPeerState(0);
 
 		final IntentFilter intentFilter = new IntentFilter();
@@ -671,9 +693,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		intentFilter.addAction(Intent.ACTION_DEVICE_STORAGE_OK);
 		registerReceiver(connectivityReceiver, intentFilter);
 
-		blockChainFile = new File(getExternalFilesDir("blockchain"), Constants.BLOCKCHAIN_FILENAME);
-		//blockChainFile = new File(getDir("blockchain", Context.MODE_PRIVATE), Constants.BLOCKCHAIN_FILENAME);
-		final boolean blockChainFileExists = blockChainFile.exists();
+		boolean blockChainFileExists = blockChainFile.exists();
 
 		if (!blockChainFileExists)
 		{
@@ -690,21 +710,6 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 			blockStore.getChainHead(); // detect corruptions as early as possible
 
 			final long earliestKeyCreationTime = wallet.getEarliestKeyCreationTime();
-
-            /*
-			if (!blockChainFileExists && earliestKeyCreationTime > 0)
-			{
-				try
-				{
-					final InputStream checkpointsInputStream = getAssets().open(Constants.CHECKPOINTS_FILENAME);
-					CheckpointManager.checkpoint(Constants.NETWORK_PARAMETERS, checkpointsInputStream, blockStore, earliestKeyCreationTime);
-				}
-				catch (final IOException x)
-				{
-					log.error("problem reading checkpoints, continuing without", x);
-				}
-			}
-            */
 		}
 		catch (final BlockStoreException x)
 		{
@@ -731,16 +736,142 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
 		maybeRotateKeys();
+		return;
 	}
+	
+	private OnObbStateChangeListener initializeListener = null;
+	
+	public void initializeBlockchainFast() {
+		final File obbMain = DownloadCompleteReceiver.getObbPath(application, DownloadCompleteReceiver.OBB_MAIN_FILENAME);
+		final File obbPatch = DownloadCompleteReceiver.getObbPath(application, DownloadCompleteReceiver.OBB_PATCH_FILENAME);
+		
+		final StorageManager storage = (StorageManager)getApplicationContext().getSystemService(STORAGE_SERVICE);
 
+		final OnObbStateChangeListener patchObbListener = new OnObbStateChangeListener() {
+			@Override
+			public void onObbStateChange(String path, int state) {
+				if (state == OnObbStateChangeListener.MOUNTED) {
+					log.info("Mounted patch OBB at " + path);
+					File mountPath = new File(storage.getMountedObbPath(path));
+					// TODO patch
+					/*
+					TxTrackingBlockStore.ApplyPatch(
+							Constants.NETWORK_PARAMETERS,
+							blockChainFile, is, pubKey);
+					 */
+					
+					storage.unmountObb(path, false, new OnObbStateChangeListener() {});
+				}
+				else {
+					log.info("Failed to mount patch OBB at " + path);
+				}
+
+				initializeListener = null;
+
+				final Intent serviceIntent = new Intent(application, BlockchainServiceImpl.class);
+				// just in case
+				serviceIntent.putExtra(DownloadCompleteReceiver.INTENT_EXTRA_SKIP_OBB_INIT, true);
+				application.startService(serviceIntent);
+			}
+		};
+		
+		final OnObbStateChangeListener mainObbListener = new OnObbStateChangeListener() {
+			@Override
+			public void onObbStateChange(String path, int state) {
+				if (state == OnObbStateChangeListener.MOUNTED) {
+					log.info("Mounted main OBB at " + path);
+					File mountPath = new File(storage.getMountedObbPath(path));
+					String baseFile = "forwarding-service.chain";
+					String[] copyExt = {"", ".p", ".t"};
+					
+					try {
+						for (String ext : copyExt) {
+							File source = new File(mountPath, baseFile + ext);
+							File target = new File(blockChainFile.getParentFile(), blockChainFile.getName() + ext);
+							
+							target.delete();
+							if (source.exists())
+								Files.copy(source, target);
+						}
+					}
+					catch (IOException ex) {
+						log.warn("Received exception while copying main OBB:" + ex.toString());
+						deleteBlockChainFile();
+					}
+					
+					initializeListener = patchObbListener;
+					storage.unmountObb(path, false, new OnObbStateChangeListener() {});
+					storage.mountObb(obbPatch.toString(), null, initializeListener);
+				}
+				else {
+					// Error while mounting, let service know
+					log.info("Failed to mounted main OBB at " + path);
+					if (initializeListener == this)
+						initializeListener = null;
+				}
+			}
+		};
+		
+		initializeListener = mainObbListener;
+		storage.mountObb(obbMain.toString(), null, initializeListener);
+	}
+	
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startId)
 	{
 		log.info("service start command: " + intent
 				+ (intent.hasExtra(Intent.EXTRA_ALARM_COUNT) ? " (alarm count: " + intent.getIntExtra(Intent.EXTRA_ALARM_COUNT, 0) + ")" : ""));
 
-		final String action = intent.getAction();
+		//log.info("org.bitcoin.NativeSecp256k1.enabled=" + org.bitcoin.NativeSecp256k1.enabled);
+		
+		if (initializeListener != null)
+			return START_NOT_STICKY;
+		
+		if (blockChain == null) {
+			boolean blockChainFileExists = blockChainFile.exists();
+			boolean tryStarting = true;
+			
+			if (DownloadCompleteReceiver.isDownloading(application)) {
+				log.info("isDownloading");
+				DownloadCompleteReceiver.updateDownloadState(application); // it can fix itself this way
+				
+				tryStarting = false;
+			}
+			else if (!blockChainFileExists
+					&& !intent.getBooleanExtra(DownloadCompleteReceiver.INTENT_EXTRA_SKIP_OBB_INIT, false) ) {
+				
+				if (DownloadCompleteReceiver.isObbAvailable(application)) {
+					// copy & patch obb files
+					log.info("TODO copy & patch obb files");
+					
+					initializeBlockchainFast();
+					if (initializeListener != null)
+						return START_NOT_STICKY;
+				}
+				else {
+					log.info("startDownload");
+					DownloadCompleteReceiver.startDownload(application);
 
+					tryStarting = false;
+				}
+			}
+			
+			if (tryStarting) {
+				try {
+					startBlockChain();
+				}
+				catch (Error e) {
+					stopSelf();
+					throw e;
+				}
+			}
+			else {
+				stopSelf();
+			}
+		}
+		
+		String action = intent.getAction();
+		
 		if (BlockchainService.ACTION_CANCEL_COINS_RECEIVED.equals(action))
 		{
 			notificationCount = 0;
@@ -781,48 +912,50 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		log.debug(".onDestroy()");
 
 		WalletApplication.scheduleStartBlockchainService(this);
-
-		unregisterReceiver(tickReceiver);
-
-		application.getWallet().removeEventListener(walletEventListener);
-
-		if (peerGroup != null)
-		{
-			peerGroup.removeEventListener(peerConnectivityListener);
-			peerGroup.removeWallet(application.getWallet());
-			peerGroup.stopAndWait();
-
-			log.info("peergroup stopped");
+		
+		if (blockStore != null) {
+			unregisterReceiver(tickReceiver);
+	
+			application.getWallet().removeEventListener(walletEventListener);
+	
+			if (peerGroup != null)
+			{
+				peerGroup.removeEventListener(peerConnectivityListener);
+				peerGroup.removeWallet(application.getWallet());
+				peerGroup.stopAndWait();
+	
+				log.info("peergroup stopped");
+			}
+	
+			peerConnectivityListener.stop();
+	
+			unregisterReceiver(connectivityReceiver);
+	
+			removeBroadcastPeerState();
+			removeBroadcastBlockchainState();
+	
+			config.setBestChainHeightEver(bestChainHeightEver);
+	
+			delayHandler.removeCallbacksAndMessages(null);
+	
+			try
+			{
+				blockStore.close();
+			}
+			catch (final BlockStoreException x)
+			{
+				throw new RuntimeException(x);
+			}
+	
+			application.saveWallet();
+	
+			if (wakeLock.isHeld())
+			{
+				log.debug("wakelock still held, releasing");
+				wakeLock.release();
+			}
 		}
-
-		peerConnectivityListener.stop();
-
-		unregisterReceiver(connectivityReceiver);
-
-		removeBroadcastPeerState();
-		removeBroadcastBlockchainState();
-
-		config.setBestChainHeightEver(bestChainHeightEver);
-
-		delayHandler.removeCallbacksAndMessages(null);
-
-		try
-		{
-			blockStore.close();
-		}
-		catch (final BlockStoreException x)
-		{
-			throw new RuntimeException(x);
-		}
-
-		application.saveWallet();
-
-		if (wakeLock.isHeld())
-		{
-			log.debug("wakelock still held, releasing");
-			wakeLock.release();
-		}
-
+		
 		if (resetBlockchainOnShutdown)
 		{
 			log.info("removing blockchain");
@@ -855,6 +988,9 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 	{
 		final List<StoredBlock> blocks = new ArrayList<StoredBlock>(maxBlocks);
 
+		if (blockChain == null)
+			return blocks;
+		
 		try
 		{
 			StoredBlock block = blockChain.getChainHead();

@@ -58,8 +58,13 @@ public class Configuration
 	private static final String PREFS_KEY_CHANGE_LOG_VERSION = "change_log_version";
 	public static final String PREFS_KEY_REMIND_BACKUP = "remind_backup";
 
-	private static final String PREFS_DEFAULT_BTC_PRECISION = "2/3";
+	private static final String PREFS_KEY_OBB_MAIN_URL = "obb_main_url";
+	private static final String PREFS_KEY_OBB_PATCH_URL = "obb_patch_url";
+	private static final String PREFS_KEY_OBB_ACTIVE_DM_ID = "obb_active_downloadmanager_id";
+	private static final String PREFS_KEY_OBB_ACTIVE_DM_TYPE = "obb_active_downloadmanager_type";
 
+	private static final String PREFS_DEFAULT_BTC_PRECISION = "6"; // Mintcoin change. "2/3";
+	
 	private static final Logger log = LoggerFactory.getLogger(Configuration.class);
 
 	public Configuration(@Nonnull final SharedPreferences prefs)
@@ -161,6 +166,39 @@ public class Configuration
 		return prefs.getBoolean(PREFS_KEY_LABS_NFC_PAYMENT_REQUEST, false);
 	}
 
+	public String getObbMainUrl()
+	{
+		return prefs.getString(PREFS_KEY_OBB_MAIN_URL, "http://mintcoin-wallet.keremhd.name.tr/main-625000.obb");
+	}
+	
+	public String getObbPatchUrl()
+	{
+		return prefs.getString(PREFS_KEY_OBB_PATCH_URL, "http://mintcoin-wallet.keremhd.name.tr/patch-null.obb");
+	}
+	
+	public long getObbActiveDownloadId()
+	{
+		return prefs.getLong(PREFS_KEY_OBB_ACTIVE_DM_ID, -1);
+	}
+	
+	public void setObbActiveDownloadId(final long obbActiveDownloadId)
+	{
+		prefs.edit().putLong(PREFS_KEY_OBB_ACTIVE_DM_ID, obbActiveDownloadId).commit();
+	}
+	
+	public String getObbActiveDownloadType()
+	{
+		return prefs.getString(PREFS_KEY_OBB_ACTIVE_DM_TYPE, null);
+	}
+	
+	public void setObbActiveDownloadType(String obbActiveDownloadType)
+	{
+		if (obbActiveDownloadType != null)
+			prefs.edit().putString(PREFS_KEY_OBB_ACTIVE_DM_TYPE, obbActiveDownloadType).commit();
+		else
+			prefs.edit().remove(PREFS_KEY_OBB_ACTIVE_DM_TYPE).commit();
+	}
+	
 	public boolean versionCodeCrossed(final int currentVersionCode, final int triggeringVersionCode)
 	{
 		final boolean wasBelow = lastVersionCode < triggeringVersionCode;

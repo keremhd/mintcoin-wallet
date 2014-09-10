@@ -55,12 +55,12 @@ public class GenericUtils
 		if (shift == 0)
 		{
 			if (precision == 2)
-                newValue = value.subtract(value.mod(new BigInteger("1000000"))).add(value.mod(new BigInteger("1000000")).divide(new BigInteger("500000")).multiply(new BigInteger("1000000")));
-			else if (precision == 4)
                 newValue = value.subtract(value.mod(new BigInteger("10000"))).add(value.mod(new BigInteger("10000")).divide(new BigInteger("5000")).multiply(new BigInteger("10000")));
-			else if (precision == 6)
+			else if (precision == 4)
                 newValue = value.subtract(value.mod(new BigInteger("100"))).add(value.mod(new BigInteger("100")).divide(new BigInteger("50")).multiply(new BigInteger("100")));
-			else if (precision == 8)
+			else if (precision == 6)
+                ;
+			else if (precision == 8) /* backwards compability */
 				;
 			else
 				throw new IllegalArgumentException("cannot handle precision/shift: " + precision + "/" + shift);
@@ -69,21 +69,19 @@ public class GenericUtils
 			final long coins = (absValue.divide(new BigInteger(String.valueOf(ONE_BTC_INT)))).longValue();
 			final int satoshis = (absValue.mod(new BigInteger(String.valueOf(ONE_BTC_INT))).intValue());
 
-			if (satoshis % 1000000 == 0)
-				return String.format(Locale.US, "%s%d.%02d", sign, coins, satoshis / 1000000);
-			else if (satoshis % 10000 == 0)
-				return String.format(Locale.US, "%s%d.%04d", sign, coins, satoshis / 10000);
+			if (satoshis % 10000 == 0)
+				return String.format(Locale.US, "%s%d.%02d", sign, coins, satoshis / 10000);
 			else if (satoshis % 100 == 0)
-				return String.format(Locale.US, "%s%d.%06d", sign, coins, satoshis / 100);
+				return String.format(Locale.US, "%s%d.%04d", sign, coins, satoshis / 100);
 			else
-				return String.format(Locale.US, "%s%d.%08d", sign, coins, satoshis);
+				return String.format(Locale.US, "%s%d.%06d", sign, coins, satoshis);
 		}
 		else if (shift == 3)
 		{
 			if (precision == 2)
-                newValue = value.subtract(value.mod(new BigInteger("1000"))).add(value.mod(new BigInteger("1000")).divide(new BigInteger("500")).multiply(new BigInteger("1000")));
-			else if (precision == 4)
                 newValue = value.subtract(value.mod(new BigInteger("10"))).add(value.mod(new BigInteger("10")).divide(new BigInteger("5")).multiply(new BigInteger("10")));
+			else if (precision == 4)
+                ;
 			else if (precision == 5)
 				;
 			else
@@ -93,12 +91,10 @@ public class GenericUtils
             final long coins = (absValue.divide(new BigInteger(String.valueOf(ONE_MBTC_INT)))).longValue();
             final int satoshis = (absValue.mod(new BigInteger(String.valueOf(ONE_MBTC_INT))).intValue());
 
-			if (satoshis % 1000 == 0)
-				return String.format(Locale.US, "%s%d.%02d", sign, coins, satoshis / 1000);
-			else if (satoshis % 10 == 0)
-				return String.format(Locale.US, "%s%d.%04d", sign, coins, satoshis / 10);
+			if (satoshis % 10 == 0)
+				return String.format(Locale.US, "%s%d.%02d", sign, coins, satoshis / 10);
 			else
-				return String.format(Locale.US, "%s%d.%05d", sign, coins, satoshis);
+				return String.format(Locale.US, "%s%d.%03d", sign, coins, satoshis);
 		}
 		else
 		{
@@ -108,7 +104,7 @@ public class GenericUtils
 
 	public static BigInteger toNanoCoins(final String value, final int shift) throws ArithmeticException
 	{
-		final BigInteger nanoCoins = new BigDecimal(value).movePointRight(8 - shift).toBigIntegerExact();
+		final BigInteger nanoCoins = new BigDecimal(value).movePointRight(6 - shift).toBigIntegerExact();
 
 		if (nanoCoins.signum() < 0)
 			throw new ArithmeticException("negative amount: " + value);

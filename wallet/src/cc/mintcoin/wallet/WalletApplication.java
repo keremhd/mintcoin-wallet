@@ -141,7 +141,7 @@ public class WalletApplication extends Application
 		wallet.autosaveToFile(walletFile, 1, TimeUnit.SECONDS, new WalletAutosaveEventListener());
 
 		// clean up spam
-		wallet.cleanup();
+		//wallet.cleanup(); // TODO 20140910 removal of dust tx causes crash on mintcoinj
 
 		config.updateLastVersionCode(packageInfo.versionCode);
 
