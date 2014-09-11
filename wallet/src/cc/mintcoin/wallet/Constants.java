@@ -86,7 +86,7 @@ public class Constants
 	public static final int LOCAL_PRECISION = 4;
 
 	public static final String DONATION_ADDRESS = "MtQMRCjdUuc7cebgLD2ZmfzVjtECyem6cL";
-	public static final String REPORT_EMAIL = "keremhd@github.com";
+	public static final String REPORT_EMAIL = "mintcoinandroidwallet@gmail.com";
 	public static final String REPORT_SUBJECT_ISSUE = "Reported issue";
 	public static final String REPORT_SUBJECT_CRASH = "Crash report";
 
