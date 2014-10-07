@@ -136,6 +136,31 @@ public class DownloadCompleteReceiver extends BroadcastReceiver
 		return (getDownloadState(config) != STATE_NONE_NONE);
 	}
 	
+	public static class DownloadDetail
+	{
+		public int mainBytesDownloaded;
+		public int mainBytesTotal;
+		public int patchBytesDownloaded;
+		public int patchBytesTotal;
+		public String status;
+		public String statusDetail;
+	};
+	
+	public static DownloadDetail getDownloadDetail(final Context context) {
+		DownloadDetail detail = new DownloadDetail();
+		return detail;
+		//int state = getDownloadState(context);
+		/*if (state == STATE_NONE_NONE) {
+			detail.mainBytesDownloaded = 0;
+			detail.mainBytesTotal = 1;
+			detail.patchBytesDownloaded = 0;
+			detail.patchBytesTotal = 1;
+			detail.status = "STATE_NONE_NONE";
+			detail.statusDetail = "";
+		}*/
+		
+	}
+	
 	private static boolean isObbValid(final WalletApplication app, String obbFile) {
 		File file = null;
 		if (OBB_MAIN_FILE.equals(obbFile))

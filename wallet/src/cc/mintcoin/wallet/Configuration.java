@@ -58,9 +58,11 @@ public class Configuration
 	private static final String PREFS_KEY_CHANGE_LOG_VERSION = "change_log_version";
 	public static final String PREFS_KEY_REMIND_BACKUP = "remind_backup";
 
-	private static final String PREFS_KEY_OBB_MAIN_URL = "obb_main_url";
-	private static final String PREFS_KEY_OBB_PATCH_URL = "obb_patch_url";
-	private static final String PREFS_KEY_OBB_ACTIVE_DM_ID = "obb_active_downloadmanager_id";
+	private static final String PREFS_KEY_OBB_MAIN_URL       = "obb_main_url";
+	private static final String PREFS_KEY_OBB_PATCH_URL      = "obb_patch_url";
+	private static final String PREFS_KEY_OBB_MAIN_HASH      = "obb_main_hash";
+	private static final String PREFS_KEY_OBB_PATCH_HASH     = "obb_patch_hash";
+	private static final String PREFS_KEY_OBB_ACTIVE_DM_ID   = "obb_active_downloadmanager_id";
 	private static final String PREFS_KEY_OBB_ACTIVE_DM_TYPE = "obb_active_downloadmanager_type";
 
 	private static final String PREFS_DEFAULT_BTC_PRECISION = "6"; // Mintcoin change. "2/3";
@@ -174,6 +176,26 @@ public class Configuration
 	public String getObbPatchUrl()
 	{
 		return prefs.getString(PREFS_KEY_OBB_PATCH_URL, "http://mintcoin-wallet.keremhd.name.tr/patch-null.obb");
+	}
+	
+	public String getObbMainHash()
+	{
+		return prefs.getString(PREFS_KEY_OBB_MAIN_HASH, "");
+	}
+	
+	public String getObbPatchHash()
+	{
+		return prefs.getString(PREFS_KEY_OBB_PATCH_HASH, "");
+	}
+	
+	public void setObbDownloadInformation(String mainUrl, String patchUrl, String mainHash, String patchHash)
+	{
+		prefs.edit()
+			.putString(PREFS_KEY_OBB_MAIN_URL,  mainUrl)
+			.putString(PREFS_KEY_OBB_MAIN_HASH, mainHash)
+			.putString(PREFS_KEY_OBB_PATCH_URL,  patchUrl)
+			.putString(PREFS_KEY_OBB_PATCH_HASH, patchHash)
+			.commit();
 	}
 	
 	public long getObbActiveDownloadId()
@@ -299,3 +321,4 @@ public class Configuration
 		prefs.unregisterOnSharedPreferenceChangeListener(listener);
 	}
 }
+

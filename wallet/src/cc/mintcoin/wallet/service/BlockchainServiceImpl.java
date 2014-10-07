@@ -92,6 +92,7 @@ import cc.mintcoin.wallet.Constants;
 import cc.mintcoin.wallet.R;
 import cc.mintcoin.wallet.WalletApplication;
 import cc.mintcoin.wallet.WalletBalanceWidgetProvider;
+import cc.mintcoin.wallet.ui.InitialBlockchainActivity;
 import cc.mintcoin.wallet.ui.WalletActivity;
 import cc.mintcoin.wallet.util.CrashReporter;
 import cc.mintcoin.wallet.util.GenericUtils;
@@ -837,9 +838,7 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 				
 				tryStarting = false;
 			}
-			else if (!blockChainFileExists
-					&& !intent.getBooleanExtra(DownloadCompleteReceiver.INTENT_EXTRA_SKIP_OBB_INIT, false) ) {
-				
+			else if (!blockChainFileExists) {
 				if (DownloadCompleteReceiver.isObbAvailable(application)) {
 					// copy & patch obb files
 					log.info("TODO copy & patch obb files");
@@ -848,10 +847,14 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 					if (initializeListener != null)
 						return START_NOT_STICKY;
 				}
+				else if (intent.getBooleanExtra(DownloadCompleteReceiver.INTENT_EXTRA_SKIP_OBB_INIT, false) ) {
+					tryStarting = true;
+				}
 				else {
-					log.info("startDownload");
-					DownloadCompleteReceiver.startDownload(application);
-
+					// open dialog box to ask user what to do for download
+					Intent intent2 = new Intent(this, InitialBlockchainActivity.class);
+					intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+					startActivity(intent2);
 					tryStarting = false;
 				}
 			}

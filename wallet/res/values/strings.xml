@@ -225,6 +225,21 @@
 	<string name="notification_coins_received_msg">Received %s</string>
 	<string name="notification_peers_connected_msg">%d peers connected</string>
 
+	<string name="initialblockchain_button_start_download">Download (fast)</string>
+	<string name="initialblockchain_button_skip_download">Skip (slower)</string>
+	
+	<string name="initialblockchain_paused_cellular">Would you like to enable downloading over cellular connections? Depending on your data plan, this may cost you money.</string>
+    <string name="initialblockchain_paused_cellular_2">If you choose not to enable downloading over cellular connections, the download will automatically resume when wi-fi is available.</string>
+    <string name="initialblockchain_button_resume_cellular">Resume download</string>
+    <string name="initialblockchain_button_wifi_settings">Wi-Fi settings</string>
+    <string name="initialblockchain_verifying_download">Verifying Download</string>
+    <string name="initialblockchain_validation_complete">XAPK File Validation Complete.  Select OK to exit.</string>
+    <string name="initialblockchain_validation_failed">XAPK File Validation Failed.</string>
+    <string name="initialblockchain_button_pause">Pause Download</string>
+    <string name="initialblockchain_button_resume">Resume Download</string>
+    <string name="initialblockchain_button_cancel">Cancel</string>
+    <string name="initialblockchain_button_cancel_verify">Cancel Verification</string>
+	
 	<!-- generic buttons -->
 	<string name="button_ok">OK</string>
 	<string name="button_dismiss">Dismiss</string>
