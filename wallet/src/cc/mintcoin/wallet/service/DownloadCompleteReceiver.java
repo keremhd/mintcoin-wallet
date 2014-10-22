@@ -18,6 +18,7 @@
 package cc.mintcoin.wallet.service;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.content.*;
 import android.database.Cursor;
@@ -29,6 +30,10 @@ import android.os.BatteryManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
 
 import cc.mintcoin.wallet.Configuration;
 import cc.mintcoin.wallet.Constants;
@@ -70,6 +75,7 @@ public class DownloadCompleteReceiver extends BroadcastReceiver
 	
 	public static File getObbPath(WalletApplication app, String obbFilename) {
 		return new File(app.getExternalFilesDir(null), obbFilename);
+		//return new File(app.getDir("blockchain-dl", Context.MODE_PRIVATE), obbFilename);
 	}
 	
 	private static int STATE_NONE_NONE = 0;
@@ -163,15 +169,28 @@ public class DownloadCompleteReceiver extends BroadcastReceiver
 	
 	private static boolean isObbValid(final WalletApplication app, String obbFile) {
 		File file = null;
-		if (OBB_MAIN_FILE.equals(obbFile))
+		String hash = null;
+		if (OBB_MAIN_FILE.equals(obbFile)) {
 			file = getObbPath(app, OBB_MAIN_FILENAME);
-		else if (OBB_PATCH_FILE.equals(obbFile))
+			hash = app.getConfiguration().getObbMainHash();
+		}
+		else if (OBB_PATCH_FILE.equals(obbFile)) {
 			file = getObbPath(app, OBB_PATCH_FILENAME);
+			hash = app.getConfiguration().getObbPatchHash();
+		}
 		else
 			return false;
 		
-		if (file.exists() && file.canRead() && file.length() > 0)
-			return true;
+		try {
+			HashCode fileHash = Files.hash(file, Hashing.sha256());
+			
+			log.info("isObbValid(): obbfile=" + obbFile + " file=" + file + " hash=" + hash + " calculatedHash=" + fileHash.toString());
+			
+			if (fileHash.toString().toLowerCase().equals(hash.toLowerCase()))
+				return true;
+		}
+		catch (IOException e) {
+		}
 		
 		file.delete();
 		return false;

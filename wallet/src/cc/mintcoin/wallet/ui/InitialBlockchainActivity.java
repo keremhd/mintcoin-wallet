@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.runners.ParentRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cc.mintcoin.wallet.Configuration;
 import cc.mintcoin.wallet.Constants;
@@ -58,6 +60,7 @@ public class InitialBlockchainActivity extends Activity {
     
     private boolean fDisableUI = false;
     
+    private static final Logger log = LoggerFactory.getLogger(InitialBlockchainActivity.class);
 
     protected void updateState() {
     	if (fDisableUI) {
@@ -117,7 +120,7 @@ public class InitialBlockchainActivity extends Activity {
         			long maximumTime = (Long)params[1];
 
         			Address signAddress = new Address(Constants.NETWORK_PARAMETERS, Constants.DONATION_ADDRESS);
-    	    		Pattern pattern = Pattern.compile("^([0-9]+)\\s+(https?://\\S+)\\s+(https?://\\S+)\\s+([0-9a-fA-F]+)\\s+([0-9a-fA-F]+)\\s+(\\S+)$");
+    	    		Pattern pattern = Pattern.compile("^([0-9]+)\\s+(\\S+)\\s+(\\S+)\\s+([0-9a-fA-F]+)\\s+([0-9a-fA-F]+)\\s+(\\S+)$");
         			
     	    		in = new BufferedReader(new InputStreamReader(url.openStream()));
 	        	    String str;
@@ -138,6 +141,8 @@ public class InitialBlockchainActivity extends Activity {
 	        	    	if (str.length() == 0 || str.charAt(0) == '#')
 	        	    		continue;
 
+	        	    	log.info("str=" + str);
+	        	    	
 	        	    	Matcher m = pattern.matcher(str);
 	        	    	if (m.matches()) {
 	        	    		long t = Long.parseLong(m.group(1));
@@ -146,6 +151,11 @@ public class InitialBlockchainActivity extends Activity {
 	        	    		String hash1 = m.group(4);
 	        	    		String hash2 = m.group(5);
 	        	    		String signature = m.group(6);
+	        	    		
+	        	    		log.info("t=" + t);
+	        	    		log.info(url1 + " " + hash1);
+	        	    		log.info(url2 + " " + hash2);
+	        	    		log.info("sig " + signature);
 	        	    		
 	        	    		if (t < maximumTime) {
 	        	    			// test signature
@@ -159,11 +169,14 @@ public class InitialBlockchainActivity extends Activity {
 	    	        	    			res[1] = url2;
 	    	        	    			res[2] = hash1;
 	    	        	    			res[3] = hash2;
+	    	        	    			log.info("sig verified, chosen");
 	    	        	    			return res;
 	        	    				}
+	        	    				log.info("sig does not match, address=" + key.toAddress(Constants.NETWORK_PARAMETERS).toString() + " expectedAddress=" + signAddress.toString() );
 	        	    			}
 	        	    			catch (SignatureException e) {
 	        	    				// Invalid signature
+	        	    				log.info("invalid sig");
 	        	    			}
 	        	    		}
 	        	    	}
@@ -197,10 +210,14 @@ public class InitialBlockchainActivity extends Activity {
     			String patchHash = "";
     			
     			if (res != null && res.length == 4) {
-	    			mainUrl   = res[0];
-	    			patchUrl  = res[1];
-	    			mainHash  = res[2];
-	    			patchHash = res[3];
+    				try {
+    					mainUrl   = new URL(new URL(Constants.BLOCKCHAIN_URL), res[0]).toString();
+    					patchUrl  = new URL(new URL(Constants.BLOCKCHAIN_URL), res[1]).toString();
+    					mainHash  = res[2];
+    					patchHash = res[3];
+    				}
+    				catch (MalformedURLException e) {
+    				}
     			}
     			
     			((WalletApplication)getApplication()).getConfiguration().setObbDownloadInformation(
@@ -218,8 +235,10 @@ public class InitialBlockchainActivity extends Activity {
     		
     	};
     	
+    	final WalletApplication application = (WalletApplication)getApplication();
+    	final long earliestKeyCreationTime = application.getWallet().getEarliestKeyCreationTime();
     	
-    	fetchInformation.execute(Constants.BLOCKCHAIN_URL, new Long(0));
+    	fetchInformation.execute(Constants.BLOCKCHAIN_URL, new Long(earliestKeyCreationTime));
     }
     
     private void startDownload() {

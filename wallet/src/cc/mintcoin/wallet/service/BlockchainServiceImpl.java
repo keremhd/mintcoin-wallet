@@ -740,81 +740,21 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 		return;
 	}
 	
-	private OnObbStateChangeListener initializeListener = null;
-	
-	public void initializeBlockchainFast() {
+	private void initializeBlockchainFast() {
+		// Files must have been verified if this function is called
+		
 		final File obbMain = DownloadCompleteReceiver.getObbPath(application, DownloadCompleteReceiver.OBB_MAIN_FILENAME);
 		final File obbPatch = DownloadCompleteReceiver.getObbPath(application, DownloadCompleteReceiver.OBB_PATCH_FILENAME);
 		
-		final StorageManager storage = (StorageManager)getApplicationContext().getSystemService(STORAGE_SERVICE);
+		deleteBlockChainFile();
 
-		final OnObbStateChangeListener patchObbListener = new OnObbStateChangeListener() {
-			@Override
-			public void onObbStateChange(String path, int state) {
-				if (state == OnObbStateChangeListener.MOUNTED) {
-					log.info("Mounted patch OBB at " + path);
-					File mountPath = new File(storage.getMountedObbPath(path));
-					// TODO patch
-					/*
-					TxTrackingBlockStore.ApplyPatch(
-							Constants.NETWORK_PARAMETERS,
-							blockChainFile, is, pubKey);
-					 */
-					
-					storage.unmountObb(path, false, new OnObbStateChangeListener() {});
-				}
-				else {
-					log.info("Failed to mount patch OBB at " + path);
-				}
-
-				initializeListener = null;
-
-				final Intent serviceIntent = new Intent(application, BlockchainServiceImpl.class);
-				// just in case
-				serviceIntent.putExtra(DownloadCompleteReceiver.INTENT_EXTRA_SKIP_OBB_INIT, true);
-				application.startService(serviceIntent);
-			}
-		};
-		
-		final OnObbStateChangeListener mainObbListener = new OnObbStateChangeListener() {
-			@Override
-			public void onObbStateChange(String path, int state) {
-				if (state == OnObbStateChangeListener.MOUNTED) {
-					log.info("Mounted main OBB at " + path);
-					File mountPath = new File(storage.getMountedObbPath(path));
-					String baseFile = "forwarding-service.chain";
-					String[] copyExt = {"", ".p", ".t"};
-					
-					try {
-						for (String ext : copyExt) {
-							File source = new File(mountPath, baseFile + ext);
-							File target = new File(blockChainFile.getParentFile(), blockChainFile.getName() + ext);
-							
-							target.delete();
-							if (source.exists())
-								Files.copy(source, target);
-						}
-					}
-					catch (IOException ex) {
-						log.warn("Received exception while copying main OBB:" + ex.toString());
-						deleteBlockChainFile();
-					}
-					
-					initializeListener = patchObbListener;
-					storage.unmountObb(path, false, new OnObbStateChangeListener() {});
-					storage.mountObb(obbPatch.toString(), null, initializeListener);
-				}
-				else {
-					// Error while mounting, let service know
-					log.info("Failed to mounted main OBB at " + path);
-					if (initializeListener == this)
-						initializeListener = null;
-				}
-			}
-		};
-		
-		initializeListener = mainObbListener;
-		storage.mountObb(obbMain.toString(), null, initializeListener);
+		try {
+			Files.move(obbMain, blockChainFile);
+			Files.move(obbPatch, new File(blockChainFile.toString()+".p"));
+		}
+		catch (IOException e) {
+			deleteBlockChainFile();
+		}
 	}
 	
 	@Override
@@ -824,9 +764,6 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 				+ (intent.hasExtra(Intent.EXTRA_ALARM_COUNT) ? " (alarm count: " + intent.getIntExtra(Intent.EXTRA_ALARM_COUNT, 0) + ")" : ""));
 
 		//log.info("org.bitcoin.NativeSecp256k1.enabled=" + org.bitcoin.NativeSecp256k1.enabled);
-		
-		if (initializeListener != null)
-			return START_NOT_STICKY;
 		
 		if (blockChain == null) {
 			boolean blockChainFileExists = blockChainFile.exists();
@@ -840,12 +777,8 @@ public class BlockchainServiceImpl extends android.app.Service implements Blockc
 			}
 			else if (!blockChainFileExists) {
 				if (DownloadCompleteReceiver.isObbAvailable(application)) {
-					// copy & patch obb files
-					log.info("TODO copy & patch obb files");
-					
 					initializeBlockchainFast();
-					if (initializeListener != null)
-						return START_NOT_STICKY;
+					tryStarting = true;
 				}
 				else if (intent.getBooleanExtra(DownloadCompleteReceiver.INTENT_EXTRA_SKIP_OBB_INIT, false) ) {
 					tryStarting = true;
